@@ -11,7 +11,7 @@ function onDetect(detectedCodes: any[]) {
   const result = detectedCodes[0].rawValue
   decodedString.value = result
   console.log(result)
-  toast.success("掃描成功！", {
+  toast.warning("公尚未開放！", {
     position: "bottom-center",
     timeout: 3000,
   })
