@@ -1,11 +1,20 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { QrcodeStream } from 'vue-qrcode-reader'
 import { useToast } from 'vue-toastification'
 import coscupLogo from './assets/coscup.svg'
 
 const decodedString = ref('')
+const token = ref<string | null>(null)
 const toast = useToast()
+
+onMounted(() => {
+  const urlParams = new URLSearchParams(window.location.search)
+  const tokenFromUrl = urlParams.get('token')
+  if (tokenFromUrl) {
+    token.value = tokenFromUrl
+  }
+})
 
 function onDetect(detectedCodes: any[]) {
   const result = detectedCodes[0].rawValue
