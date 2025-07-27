@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { QrcodeStream } from 'vue-qrcode-reader'
-import { useToast } from 'vue-toastification'
+import { useToast, POSITION } from 'vue-toastification'
 import coscupLogo from './assets/coscup.svg'
 
 const decodedString = ref('')
@@ -21,7 +21,7 @@ function onDetect(detectedCodes: any[]) {
   decodedString.value = result
   console.log(result)
   toast.warning("公尚未開放！", {
-    position: "bottom-center",
+    position: POSITION.BOTTOM_CENTER,
     timeout: 3000,
   })
 }
