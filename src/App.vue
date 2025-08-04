@@ -89,7 +89,12 @@ html, body {
 }
 
 .logo {
-  width: 250px;
+  padding: 20px;
+  background-color: #fff;
+  flex-grow: 1;
+
+  max-width: 75vw;
+  max-height: 15vh;
 }
 
 .scanner-container {
