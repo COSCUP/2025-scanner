@@ -31,30 +31,32 @@ onMounted(() => {
     })
 })
 
-function onDetect(detectedCodes: any[]) {
+async function onDetect(detectedCodes: any[]) {
   const result = detectedCodes[0].rawValue
   decodedString.value = result
 
-  fetch(`https://api.mirumo.cc/api/send`, {
+  const response = await fetch(`https://api.mirumo.cc/api/send`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ token: token.value, user_id: result }),
+    body: JSON.stringify({ booth_id: token.value, user_id: result }),
   })
-    .then((response) => response.json())
-    .then((data) => {
-      toast.success(data.message, {
+
+  const body = await response.json()
+
+
+  if (!response.ok) {
+    return toast.error(body.detail, {
         position: POSITION.BOTTOM_CENTER,
         timeout: 3000,
       })
-    })
-    .catch((error) => {
-      toast.success('Error: 掃描或驗證錯誤' , {
-        position: POSITION.BOTTOM_CENTER,
-        timeout: 3000,
-      })
-    })
+  }
+
+  toast.success(body.detail, {
+    position: POSITION.BOTTOM_CENTER,
+    timeout: 3000,
+  })
 }
 </script>
 
