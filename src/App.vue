@@ -7,29 +7,60 @@ import coscupLogo from './assets/coscup.svg'
 const decodedString = ref('')
 const token = ref<string | null>(null)
 const toast = useToast()
+const img = ref<string | null>(null)
 
 onMounted(() => {
   const urlParams = new URLSearchParams(window.location.search)
   const tokenFromUrl = urlParams.get('token')
-  if (tokenFromUrl) {
-    token.value = tokenFromUrl
+
+  if (!tokenFromUrl) {
+    return ;
   }
+
+  token.value = tokenFromUrl
+
+  fetch(`https://api.mirumo.cc/api/booths/${tokenFromUrl}` , {
+    method: 'GET',
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      img.value = data.logo
+    })
+    .catch((error) => {
+      console.error('Error:', error)
+    })
 })
 
 function onDetect(detectedCodes: any[]) {
   const result = detectedCodes[0].rawValue
   decodedString.value = result
-  console.log(result)
-  toast.warning("公尚未開放！", {
-    position: POSITION.BOTTOM_CENTER,
-    timeout: 3000,
+
+  fetch(`https://api.mirumo.cc/api/send`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ token: token.value, user_id: result }),
   })
+    .then((response) => response.json())
+    .then((data) => {
+      toast.success(data.message, {
+        position: POSITION.BOTTOM_CENTER,
+        timeout: 3000,
+      })
+    })
+    .catch((error) => {
+      toast.success('Error: 掃描或驗證錯誤' , {
+        position: POSITION.BOTTOM_CENTER,
+        timeout: 3000,
+      })
+    })
 }
 </script>
 
 <template>
   <div class="main-container">
-    <img :src="coscupLogo" alt="COSCUP Logo" class="logo" />
+    <img :src="img ?? coscupLogo" alt="COSCUP Logo" class="logo" />
     <div class="scanner-container">
       <qrcode-stream @detect="onDetect"></qrcode-stream>
     </div>
