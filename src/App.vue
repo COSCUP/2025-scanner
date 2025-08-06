@@ -35,7 +35,7 @@ async function onDetect(detectedCodes: any[]) {
   const result = detectedCodes[0].rawValue
   decodedString.value = result
 
-  const response = await fetch(`https://api.mirumo.cc/api/send`, {
+  const response = await fetch(`https://geotrainpoly.coscup.org/api/send`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
