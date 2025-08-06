@@ -19,7 +19,7 @@ onMounted(() => {
 
   token.value = tokenFromUrl
 
-  fetch(`https://api.mirumo.cc/api/booths/${tokenFromUrl}` , {
+  fetch(`https://geotrainpoly.coscup.org/api/booths/${tokenFromUrl}` , {
     method: 'GET',
   })
     .then((response) => response.json())
